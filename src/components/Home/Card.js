@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#000',
     margin: 10,
-    height: Dimensions.get('window').height / 2 - 80,
-    width: Dimensions.get('window').height / 2 - 80
+    height: Dimensions.get('window').height / 2 - 60,
+    width: Dimensions.get('window').height / 2 - 60
   },
   containerNoImage: {
     backgroundColor: '#1f69e0',
@@ -38,7 +38,7 @@ export default class Card extends React.Component {
         <TouchableOpacity onPress={this.props.onPress}><View style={styles.container}>
           <Image
             style={styles.backgroundImage}
-            source={{ uri: this.props.img }}
+            source={this.props.img}
           >
           </Image>
           <Text style={styles.title}>{this.props.title}</Text>
