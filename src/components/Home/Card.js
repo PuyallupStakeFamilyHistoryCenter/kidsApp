@@ -38,10 +38,10 @@ export default class Card extends React.Component {
         <TouchableOpacity onPress={this.props.onPress}><View style={styles.container}>
           <Image
             style={styles.backgroundImage}
-            source={{ uri: this.props.img }}
+            source={this.props.img}
           >
-            <Text style={styles.title}>{this.props.title}</Text>
           </Image>
+          <Text style={styles.title}>{this.props.title}</Text>
         </View>
         </TouchableOpacity>
       );
@@ -52,6 +52,6 @@ export default class Card extends React.Component {
         </View>
       );
     }
-    
+
   }
 }
