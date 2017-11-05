@@ -1,16 +1,18 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements'
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-elements';
 import Card from './Card';
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#F5FCFF',
+    flex: 1
+  },
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    flex: 1,
+    flexDirection: 'column',
+    flexWrap: 'wrap'
   }
 });
 
@@ -93,6 +95,7 @@ export default class MainScreen extends React.Component {
     return (
       <ScrollView
         horizontal={true}
+        showsHorizontalScrollIndicator={false}
       >
         <View style={styles.container}>{gamesMarkup}</View>
       </ScrollView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 2,
     borderColor: '#000',
-    height: 300,
-    width: 300,
-    margin: 10
+    margin: 10,
+    height: Dimensions.get('window').height / 2 - 60,
+    width: Dimensions.get('window').height / 2 - 60
   },
   containerNoImage: {
     backgroundColor: '#1f69e0',
