@@ -81,11 +81,12 @@ export default class MainScreen extends React.Component {
         onPress={() => navigation.dispatch({ type: 'Login' })}
         backgroundColor="transparent"
         color="#000"
+        icon={{name: 'user', type: 'font-awesome', color: '#000'}}
       />
     );
     return {
       headerRight,
-      title: "Puyallup FHC Kids"
+      title: 'Puyallup FHC Kids'
     };
   };
 

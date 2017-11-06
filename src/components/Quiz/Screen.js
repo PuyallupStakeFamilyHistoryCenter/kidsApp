@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,8 +13,20 @@ const styles = StyleSheet.create({
 });
 
 export default class QuizScreen extends React.Component {
-  static navigationOptions = { 
-    title: 'Quiz' 
+  static navigationOptions = ({ navigation }) => {
+    let headerRight = (
+      <Button
+        title="Settings"
+        onPress={() => {}}
+        backgroundColor="transparent"
+        color="#000"
+        icon={{name: 'cog', type: 'font-awesome', color: '#000'}}
+      />
+    );
+    return {
+      headerRight,
+      title: 'Quiz'
+    };
   };
 
   render() {
