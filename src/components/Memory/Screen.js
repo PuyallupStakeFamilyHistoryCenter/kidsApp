@@ -95,6 +95,8 @@ export default class MemoryScreen extends React.Component {
             selectedIndex={this.state.selectedDifficulty || 0}
             buttons={['Easy', 'Medium', 'Hard']}
             containerStyle={{height: 75}}
+            selectedBackgroundColor="#484d56"
+            selectedTextStyle={{color: '#fff'}}
           />
         </Modal>
       );
