@@ -14,17 +14,7 @@ const styles = StyleSheet.create({
 
 export default class TilesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
-    let headerRight = (
-      <Button
-        title="Settings"
-        onPress={() => {}}
-        backgroundColor="transparent"
-        color="#000"
-        icon={{name: 'cog', type: 'font-awesome', color: '#000'}}
-      />
-    );
     return {
-      headerRight,
       title: 'Tiles'
     };
   };
