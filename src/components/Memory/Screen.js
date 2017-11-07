@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, ButtonGroup } from 'react-native-elements';
 import Modal from '../Shared/Modal';
+import Card from './Card';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   subTitle: {
     fontSize: 20,
@@ -20,6 +21,16 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 15,
     marginLeft: 10
+  },
+  board: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    backgroundColor: 'green',
+    width: '100%',
+    height: '100%'
   }
 });
 
@@ -81,6 +92,37 @@ export default class MemoryScreen extends React.Component {
     });
   }
 
+  handleCardTap(idx) {
+    if (this.matchTimer) {
+      clearTimeout(this.matchTimer);
+      this.matchTimer = null;
+      this.refs['memoryCard-'+this.state.pendingCard1].flipCard(false);
+      this.refs['memoryCard-'+this.state.pendingCard2].flipCard(false);
+      this.setState({
+        pendingCard1: idx,
+        pendingCard2: undefined
+      });
+    } else if (this.state.pendingCard1 !== undefined) {
+      console.log("$$$ - " + this.state.pendingCard1 + ' - ' + idx);
+      this.matchTimer = setTimeout(() => {
+        this.refs['memoryCard-'+idx].flipCard(false);
+        this.refs['memoryCard-'+this.state.pendingCard1].flipCard(false);
+        this.setState({
+          pendingCard1: undefined,
+          pendingCard2: undefined
+        });
+        this.matchTimer = null;
+      }, 2000);
+      this.setState({
+        pendingCard2: idx
+      });
+    } else {
+      this.setState({
+        pendingCard1: idx
+      });
+    }
+  }
+
   render() {
     let settingsView;
 
@@ -100,9 +142,35 @@ export default class MemoryScreen extends React.Component {
       );
     }
 
+    let cards = [];
+    let cardCount;
+    let cardHeight;
+    let cardWidth;
+    switch(this.state.selectedDifficulty) {
+    case 2:
+      cardCount = 40;
+      cardHeight = '20%';
+      cardWidth = '12.5%';
+      break;
+    case 1:
+      cardCount = 24;
+      cardHeight = '25%';
+      cardWidth = (100/6 + '%');
+      break;
+    default:
+      cardCount = 12;
+      cardHeight = '33%';
+      cardWidth = '25%';
+    }
+    for (let i = 0; i < cardCount; i++) {
+      cards.push(<Card key={'memory-'+i} ref={'memoryCard-'+i} cardHeight={cardHeight} cardWidth={cardWidth} onTap={this.handleCardTap.bind(this, i)}/>)
+    }
+
     return (
       <View style={styles.container}>
-        <Text>Memory app will go here</Text>
+        <View style={styles.board}>
+          {cards}
+        </View>
         {settingsView}
       </View>
     );
