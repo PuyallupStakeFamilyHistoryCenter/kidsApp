@@ -93,7 +93,7 @@ export default class Card extends React.Component {
           <Animated.View style={[styles.flipCard, frontAnimatedStyle, (this.props.flipped ? {zIndex: 1} : {zIndex: 2})]}>
             <Image
               style={styles.backgroundImage}
-              source={require('../../assets/FHC.png')}
+              source={require('../../assets/FHC-Small.jpg')}
             />
           </Animated.View>
           <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack, (this.props.flipped ? {zIndex: 2} : {zIndex: 1})]}>
