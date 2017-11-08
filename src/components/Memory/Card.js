@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
   flipCardBack: {
     position: 'absolute',
-    top: 0,
+    top: 0
   },
   backgroundImage: {
     resizeMode: 'center',
@@ -90,13 +90,13 @@ export default class Card extends React.Component {
     return (
       <View style={[styles.container, {height: this.props.height, width: this.props.width}]}>
         <TouchableOpacity onPress={() => this.flipCard()}>
-          <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+          <Animated.View style={[styles.flipCard, frontAnimatedStyle, (this.props.flipped ? {zIndex: 1} : {zIndex: 2})]}>
             <Image
               style={styles.backgroundImage}
               source={require('../../assets/FHC.png')}
             />
           </Animated.View>
-          <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
+          <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack, (this.props.flipped ? {zIndex: 2} : {zIndex: 1})]}>
             <Text>{this.props.id}</Text>
           </Animated.View>
         </TouchableOpacity>
