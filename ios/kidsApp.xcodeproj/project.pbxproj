@@ -532,6 +532,14 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		568B5A841FB2746900896EA6 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				17EC9593562F4628AA47A1B1 /* libRNVectorIcons.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		569041141FB0B18200B82FF2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -595,6 +603,7 @@
 				00E356EF1AD99517003FC87E /* kidsAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				36BF5F2A400840A9819D0493 /* Resources */,
+				568B5A841FB2746900896EA6 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -1231,7 +1240,6 @@
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				HEADER_SEARCH_PATHS = (
@@ -1254,7 +1262,6 @@
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
