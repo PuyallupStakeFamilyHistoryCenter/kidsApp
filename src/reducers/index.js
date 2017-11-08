@@ -5,7 +5,7 @@ import { AppNavigator } from '../navigators/AppNavigator';
 
 const firstAction = AppNavigator.router.getActionForPathAndParams('Home');
 const tempNavState = AppNavigator.router.getStateForAction(firstAction);
-const secondAction = AppNavigator.router.getActionForPathAndParams('Login');
+const secondAction = AppNavigator.router.getActionForPathAndParams('Memory');
 const initialNavState = AppNavigator.router.getStateForAction(
   secondAction,
   tempNavState

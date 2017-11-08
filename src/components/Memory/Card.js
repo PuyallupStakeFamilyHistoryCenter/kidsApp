@@ -24,15 +24,8 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   flipCardBack: {
-    backgroundColor: 'red',
     position: 'absolute',
     top: 0,
-  },
-  flipText: {
-    width: 90,
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
   },
   backgroundImage: {
     resizeMode: 'center',
@@ -45,10 +38,6 @@ const styles = StyleSheet.create({
 export default class Card extends React.Component {
   componentWillMount() {
     this.animatedValue = new Animated.Value(0);
-    this.value = 0;
-    this.animatedValue.addListener(({ value }) => {
-      this.value = value;
-    })
     this.frontInterpolate = this.animatedValue.interpolate({
       inputRange: [0, 180],
       outputRange: ['0deg', '180deg'],
@@ -58,8 +47,18 @@ export default class Card extends React.Component {
       outputRange: ['180deg', '360deg']
     })
   }
-  flipCard(passTap = true) {
-    if (this.value >= 90) {
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.flipped && this.props.flipped) {
+      this.flipCard(false);
+    }
+  }
+
+  flipCard(useCallback = true) {
+    if (this.props.solved) {
+      return;
+    }
+    if (this.props.flipped) {
       Animated.spring(this.animatedValue,{
         toValue: 0,
         friction: 8,
@@ -72,7 +71,7 @@ export default class Card extends React.Component {
         tension: 10
       }).start();
     }
-    if (passTap) {
+    if (useCallback) {
       this.props.onTap();
     }
   }
@@ -89,7 +88,7 @@ export default class Card extends React.Component {
       ]
     }
     return (
-      <View style={[styles.container, {height: this.props.cardHeight, width: this.props.cardWidth}]}>
+      <View style={[styles.container, {height: this.props.height, width: this.props.width}]}>
         <TouchableOpacity onPress={() => this.flipCard()}>
           <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
             <Image
@@ -98,9 +97,7 @@ export default class Card extends React.Component {
             />
           </Animated.View>
           <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
-            <Text style={styles.flipText}>
-              BACK
-            </Text>
+            <Text>{this.props.id}</Text>
           </Animated.View>
         </TouchableOpacity>
       </View>
