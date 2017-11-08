@@ -31,6 +31,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#006622',
     width: '100%',
     height: '100%'
+  },
+  winner: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    backgroundColor: '#006622',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    position: 'absolute'
+  },
+  winnerText: {
+    color: '#fff',
+    fontSize: 300
   }
 });
 
@@ -66,7 +82,9 @@ export default class MemoryScreen extends React.Component {
     this.state = {
       cards: [],
       firstRender: true,
-      showSettings: true
+      showSettings: true,
+      matches: 0,
+      winner: false
     };
   }
 
@@ -110,7 +128,9 @@ export default class MemoryScreen extends React.Component {
     this.setState({
       cards: [],
       pendingCard1: undefined,
-      pendingCard2: undefined
+      pendingCard2: undefined,
+      matches: 0,
+      winner: false
     });
   }
 
@@ -147,6 +167,8 @@ export default class MemoryScreen extends React.Component {
     let modifiedCards = this.state.cards.concat([]);
     let pendingCard1 = this.state.pendingCard1;
     let pendingCard2 = this.state.pendingCard2;
+    let matches = this.state.matches;
+    let winner = this.state.winner;
     if (this.matchTimer) {
       //Flipping a card while a non match is waiting to flip back
       modifiedCards[pendingCard1].flipped = false;
@@ -176,6 +198,14 @@ export default class MemoryScreen extends React.Component {
           modifiedCards[pendingCard2].solved = true;
           pendingCard1 = undefined;
           pendingCard2 = undefined;
+          matches++;
+          if (matches === (modifiedCards.length/2)) {
+            winner = true;
+            setTimeout(() => {
+              this.resetGame();
+              this.setupGame();
+            }, 3000);
+          }
         } else {
           //No Match
           this.matchTimer = setTimeout(() => {
@@ -200,13 +230,15 @@ export default class MemoryScreen extends React.Component {
     this.setState({
       cards: modifiedCards,
       pendingCard1,
-      pendingCard2
+      pendingCard2,
+      matches,
+      winner
     });
   }
 
   render() {
     let settingsView;
-
+    let winnerView;
     if (this.state.showSettings) {
       settingsView = (
         <Modal title="Settings" onClose={this.handleSettingsClose.bind(this)} animate={!this.state.firstRender}>
@@ -223,6 +255,12 @@ export default class MemoryScreen extends React.Component {
           />
         </Modal>
       );
+    } else if (this.state.winner) {
+      winnerView = (
+        <View style={styles.winner}>
+          <Text style={styles.winnerText}>YOU WIN!</Text>
+        </View>
+      );
     }
 
     let cards = [];
@@ -235,6 +273,7 @@ export default class MemoryScreen extends React.Component {
         <View style={styles.board}>
           {cards}
         </View>
+        {winnerView}
         {settingsView}
       </View>
     );
