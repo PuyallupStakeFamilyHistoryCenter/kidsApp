@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 6,
     maxHeight: Dimensions.get('window').height - (Dimensions.get('window').height * .2),
-    minHeight: 200,
+    minHeight: 100,
     width: Dimensions.get('window').width - (Dimensions.get('window').width * .2)
   },
   title: {
