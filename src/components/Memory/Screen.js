@@ -5,7 +5,7 @@ import { Button, ButtonGroup } from 'react-native-elements';
 import Modal from '../Shared/Modal';
 import Card from './Card';
 import { screenStyles as styles } from './Styles';
-import { BACKGROUND_COLOR_CONFIRM, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
+import { BACKGROUND_COLOR_CONFIRM, BORDER_RADIUS, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
 
 class CardModel {
   constructor(id, height, width) {
@@ -207,6 +207,7 @@ export default class MemoryScreen extends React.Component {
             selectedIndex={this.state.selectedDifficulty || 0}
             buttons={['Easy', 'Medium', 'Hard']}
             containerStyle={{height: 75}}
+            containerBorderRadius={BORDER_RADIUS}
             selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
             selectedTextStyle={{color: FONT_COLOR_LIGHT}}
           />

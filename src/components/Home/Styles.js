@@ -1,5 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import {
+  BACKGROUND_COLOR_LIGHT,
   BACKGROUND_IMAGE,
   BACKGROUND_TRANSPARENT_DARK,
   BORDER_COLOR_DARK,
@@ -21,6 +22,7 @@ export const screenStyles = StyleSheet.create({
 
 export const cardStyles = StyleSheet.create({
   container: {
+    backgroundColor: BACKGROUND_COLOR_LIGHT,
     borderRadius: BORDER_RADIUS,
     borderWidth: BORDER_WIDTH,
     borderColor: BORDER_COLOR_DARK,

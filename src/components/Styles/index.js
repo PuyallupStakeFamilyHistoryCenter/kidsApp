@@ -1,13 +1,7 @@
-export const SCREEN_CONTAINER = {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: '#F5FCFF'
-};
-
+export const BACKGROUND_COLOR_DEFAULT = '#e7ebed';
 export const BACKGROUND_COLOR_DARK = '#000';
 export const BACKGROUND_COLOR_LIGHT = '#fff';
-export const BACKGROUND_COLOR_CONFIRM = '#2B97F0';
+export const BACKGROUND_COLOR_CONFIRM = '#2b97f0';
 export const BACKGROUND_COLOR_CANCEL = '#ff4d4d';
 export const BACKGROUND_TRANSPARENT_DARK = 'rgba(0, 0, 0, 0.7)';
 
@@ -47,3 +41,10 @@ export const MARGIN_M = 12;
 export const MARGIN_L = 16;
 export const MARGIN_XL = 20;
 export const MARGIN_XXL = 24;
+
+export const SCREEN_CONTAINER = {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: BACKGROUND_COLOR_DEFAULT
+};
