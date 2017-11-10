@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   },
   winnerText: {
     color: '#fff',
-    fontSize: 300
+    fontSize: 300,
+    textAlign: 'center'
   }
 });
 
