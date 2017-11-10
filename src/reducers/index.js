@@ -3,13 +3,8 @@ import { NavigationActions } from 'react-navigation';
 
 import { AppNavigator } from '../navigators/AppNavigator';
 
-const firstAction = AppNavigator.router.getActionForPathAndParams('Home');
-const tempNavState = AppNavigator.router.getStateForAction(firstAction);
-const secondAction = AppNavigator.router.getActionForPathAndParams('Login');
-const initialNavState = AppNavigator.router.getStateForAction(
-  secondAction,
-  tempNavState
-);
+const loginAction = AppNavigator.router.getActionForPathAndParams('Login');
+const initialNavState = AppNavigator.router.getStateForAction(loginAction);
 
 function nav(state = initialNavState, action) {
   let nextState;

@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     top: 0
   },
   backgroundImage: {
-    resizeMode: 'center',
+    resizeMode: 'contain',
     position: 'absolute',
     height: '100%',
     width: '100%'

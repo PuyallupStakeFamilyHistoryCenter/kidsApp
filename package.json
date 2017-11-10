@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
+		"test": "jest",
+		"release": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ./release/main.jsbundle --assets-dest ./release"
 	},
 	"dependencies": {
 		"expo": "^22.0.0",
