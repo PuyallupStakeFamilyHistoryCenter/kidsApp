@@ -1,57 +1,20 @@
 import React from 'react';
-import { Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: '#000',
-    margin: 10,
-    height: Dimensions.get('window').height / 2 - 60,
-    width: Dimensions.get('window').height / 2 - 60
-  },
-  containerNoImage: {
-    backgroundColor: '#1f69e0',
-  },
-  backgroundImage: {
-    resizeMode: 'cover',
-    position: 'absolute',
-    height: '100%',
-    width: '100%'
-  },
-  title: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 30,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%'
-  }
-});
+import { cardStyles as styles } from './Styles';
 
 export default class Card extends React.Component {
   render() {
-    if (this.props.img) {
-      return (
-        <TouchableOpacity onPress={this.props.onPress}><View style={styles.container}>
-          <Image
-            style={styles.backgroundImage}
-            source={this.props.img}
-          >
-          </Image>
-          <Text style={styles.title}>{this.props.title}</Text>
-        </View>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <View style={[styles.container, styles.containerNoImage]}>
-          <Text style={styles.title}>{this.props.title}</Text>
-        </View>
-      );
-    }
-
+    return (
+      <TouchableOpacity onPress={this.props.onPress}><View style={styles.container}>
+        <Image
+          style={styles.backgroundImage}
+          source={this.props.img}
+        >
+        </Image>
+        <Text style={styles.title}>{this.props.title}</Text>
+      </View>
+      </TouchableOpacity>
+    );
   }
 }

@@ -4,51 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Button, ButtonGroup } from 'react-native-elements';
 import Modal from '../Shared/Modal';
 import Card from './Card';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  subTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    marginTop: 10
-  },
-  bodyText: {
-    fontSize: 15,
-    marginLeft: 10
-  },
-  board: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    backgroundColor: '#006622',
-    width: '100%',
-    height: '100%'
-  },
-  winner: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    backgroundColor: '#006622',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    position: 'absolute'
-  },
-  winnerText: {
-    color: '#fff',
-    fontSize: 300
-  }
-});
+import { screenStyles as styles } from './Styles';
+import { BACKGROUND_COLOR_CONFIRM, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
 
 class CardModel {
   constructor(id, height, width) {
@@ -67,8 +24,8 @@ export default class MemoryScreen extends React.Component {
         title="Settings"
         onPress={navigation.state.params && navigation.state.params.onPress || (() => {})}
         backgroundColor="transparent"
-        color="#000"
-        icon={{name: 'cog', type: 'font-awesome', color: '#000'}}
+        color={FONT_COLOR_DARK}
+        icon={{name: 'cog', type: 'font-awesome', color: FONT_COLOR_DARK}}
       />
     );
     return {
@@ -250,8 +207,8 @@ export default class MemoryScreen extends React.Component {
             selectedIndex={this.state.selectedDifficulty || 0}
             buttons={['Easy', 'Medium', 'Hard']}
             containerStyle={{height: 75}}
-            selectedBackgroundColor="#484d56"
-            selectedTextStyle={{color: '#fff'}}
+            selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
+            selectedTextStyle={{color: FONT_COLOR_LIGHT}}
           />
         </Modal>
       );

@@ -2,20 +2,8 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import Card from './Card';
-
-const styles = StyleSheet.create({
-  scrollContainer: {
-    backgroundColor: '#F5FCFF',
-    flex: 1
-  },
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    justifyContent: 'center'
-  }
-});
+import { screenStyles as styles } from './Styles';
+import { FONT_COLOR_DARK } from '../Styles';
 
 const games = [{
   props: {
@@ -80,8 +68,8 @@ export default class MainScreen extends React.Component {
         title="Switch User"
         onPress={() => navigation.dispatch({ type: 'Login' })}
         backgroundColor="transparent"
-        color="#000"
-        icon={{name: 'user', type: 'font-awesome', color: '#000'}}
+        color={FONT_COLOR_DARK}
+        icon={{name: 'user', type: 'font-awesome', color: FONT_COLOR_DARK}}
       />
     );
     return {
