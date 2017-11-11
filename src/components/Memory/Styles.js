@@ -46,7 +46,8 @@ export const screenStyles = StyleSheet.create({
   },
   winnerText: {
     color: FONT_COLOR_LIGHT,
-    fontSize: 300
+    fontSize: 300,
+    textAlign: 'center'
   }
 });
 
