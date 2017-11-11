@@ -8,7 +8,7 @@ import {
   BORDER_WIDTH,
   FONT_COLOR_LIGHT,
   HEADER_1,
-  MARGIN_M,
+  MARGIN_S,
   SCREEN_CONTAINER
 } from '../Styles';
 
@@ -26,7 +26,7 @@ export const cardStyles = StyleSheet.create({
     borderRadius: BORDER_RADIUS,
     borderWidth: BORDER_WIDTH,
     borderColor: BORDER_COLOR_DARK,
-    margin: MARGIN_M,
+    margin: MARGIN_S,
     height: Dimensions.get('window').height / 2 - 60,
     width: Dimensions.get('window').height / 2 - 60
   },
