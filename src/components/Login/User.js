@@ -5,17 +5,7 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    borderBottomWidth: 1,
-    width: '100%'
-  },
-  name: {
-    fontSize: 20,
-    padding: 10
-  }
-});
+import { userStyles as styles } from './Styles';
 
 export default class User extends React.Component {
   render() {

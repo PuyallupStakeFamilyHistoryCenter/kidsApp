@@ -4,60 +4,8 @@ import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button } from 'react-native-elements'
 import User from './User';
 import Modal from '../Shared/Modal';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  list: {
-    width: '100%'
-  },
-  modalView: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  inputWrapper: {
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    maxWidth: '70%',
-    height: 35
-  },
-  modalBody: {
-    flex: 1,
-    fontSize: 16,
-    textAlign: 'right',
-    fontWeight: 'bold',
-    height: '100%',
-    lineHeight: 33
-  },
-  modalInput: {
-    flex: 2,
-    height: '100%',
-    borderColor: 'black',
-    borderBottomWidth: 1,
-    marginLeft: 5,
-    borderRadius: 4
-  },
-  buttonWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 25,
-    width: '100%'
-  },
-  loginButton: {
-    flex: 1,
-    borderRadius: 3,
-    width: 200
-  }
-});
+import { screenStyles as styles } from './Styles';
+import { BACKGROUND_COLOR_CONFIRM, BACKGROUND_COLOR_CANCEL } from '../Styles';
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -92,8 +40,8 @@ export default class LoginScreen extends React.Component {
             <TextInput style={styles.modalInput}/>
           </View>
           <View style={styles.buttonWrapper}>
-            <Button title='Login' buttonStyle={styles.loginButton} backgroundColor="#2B97F0"/>
-            <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor="#ff4d4d"/>
+            <Button title='Login' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CONFIRM}/>
+            <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CANCEL}/>
           </View>
           </View>
         </Modal>
