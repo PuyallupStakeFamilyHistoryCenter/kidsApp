@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button } from 'react-native-elements'
 import User from './User';
 import Modal from '../Shared/Modal';
@@ -59,14 +60,19 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   static navigationOptions = {
-    title: 'Log In'
+    title: 'Select User'
   };
 
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    console.log("$$$$");
+    console.log(this.props);
   }
 
   handleUserSelect(id) {
@@ -100,6 +106,14 @@ export default class LoginScreen extends React.Component {
       );
     }
 
+    if (this.props.fetchingUsers) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large"/>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -112,3 +126,13 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const { fetchingUsers, isLoggedIn } = state.auth;
+  return {
+    fetchingUsers,
+    isLoggedIn
+  }
+}
+
+export default connect(mapStateToProps)(LoginScreen)
