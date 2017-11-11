@@ -8,32 +8,7 @@ import {
   Animated,
   Image
 } from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10
-  },
-  flipCard: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    backfaceVisibility: 'hidden',
-    borderWidth: 2,
-    borderRadius: 5
-  },
-  flipCardBack: {
-    position: 'absolute',
-    top: 0
-  },
-  backgroundImage: {
-    resizeMode: 'contain',
-    position: 'absolute',
-    height: '100%',
-    width: '100%'
-  }
-});
+import { cardStyles as styles } from './Styles';
 
 export default class Card extends React.Component {
   componentWillMount() {
