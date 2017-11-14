@@ -4,6 +4,8 @@ import {
   BORDER_RADIUS,
   BORDER_WIDTH,
   FONT_SIZE_M,
+  FONT_SIZE_XL,
+  HEADER_1,
   HEADER_2,
   MARGIN_XS,
   MARGIN_M,
@@ -14,6 +16,12 @@ import {
 export const screenStyles = StyleSheet.create({
   container: SCREEN_CONTAINER,
   list: {
+    width: '100%'
+  },
+  noUsers: {
+    flex: 1,
+    fontSize: FONT_SIZE_M,
+    padding: MARGIN_M,
     width: '100%'
   },
   modalView: {
@@ -56,6 +64,21 @@ export const screenStyles = StyleSheet.create({
     flex: 1,
     borderRadius: BORDER_RADIUS,
     width: 200
+  },
+  userHeader: {
+    display: 'flex',
+    height: 50,
+    justifyContent: 'center',
+    width: '100%'
+  },
+  userTitle: {
+    ...HEADER_1,
+    textAlign: 'center'
+  },
+  avaliableUsers: {
+    ...HEADER_2,
+    paddingLeft: MARGIN_M,
+    width: '100%'
   }
 });
 
@@ -66,6 +89,7 @@ export const userStyles = StyleSheet.create({
   },
   name: {
     ...HEADER_2,
+    fontWeight: 'normal',
     padding: MARGIN_M
   }
 });

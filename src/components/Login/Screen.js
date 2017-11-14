@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button } from 'react-native-elements';
@@ -24,10 +25,22 @@ class LoginScreen extends React.Component {
     if (nextProps.fetchingUsers) {
       SEND_WEBSOCKET('list-current-users');
     }
-    if (!this.props.userToken && nextProps.userToken) {
-      console.log("LOGGED IN");
-      console.log(this.props.navigation);
-      this.props.navigation.dispatch({ type: 'Home' })
+    if (!this.props.userData && nextProps.userData) {
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home'})
+        ]
+      });
+      this.props.navigation.dispatch(resetAction);
+    } else if (this.props.userData && !nextProps.userData) {
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Login'})
+        ]
+      });
+      this.props.navigation.dispatch(resetAction);
     }
   }
 
@@ -48,10 +61,19 @@ class LoginScreen extends React.Component {
   }
 
   handleLogout() {
-    SEND_WEBSOCKET('logout ' + this.props.userToken);
+    console.log("LOGOUT TIME");
+    SEND_WEBSOCKET('logout ' + this.props.userData.token);
   }
 
   render() {
+    if (this.props.fetchingUsers) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large"/>
+        </View>
+      );
+    }
+
     let welcomeView;
     if (this.state.selectedUser) {
       let selectedUserObj = this.props.userList.find(user => user.id === this.state.selectedUser);
@@ -71,13 +93,13 @@ class LoginScreen extends React.Component {
       );
     }
 
-    if (this.props.fetchingUsers) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large"/>
-        </View>
-      );
-    }
+    let loggedInString = this.props.userData ? ('Currently logged in as ' + this.props.userData.name) : 'Currently no user logged in';
+    console.log(this.props.userData);
+    let currentUserView = (
+      <View style={styles.userHeader}>
+        <Text style={styles.userTitle}>{loggedInString}</Text>
+      </View>
+    );
 
     let userList = this.props.userList.map((user, idx) => {
       return {
@@ -86,13 +108,26 @@ class LoginScreen extends React.Component {
       };
     });
 
-    return (
-      <View style={styles.container}>
+    let listMarkup;
+    if (userList.length) {
+      listMarkup = (
         <FlatList
           data={userList}
           renderItem={({item}) => <User name={item.name} id={item.id} onTap={this.handleUserSelect.bind(this)}/>}
           style={styles.list}
         />
+      );
+    } else {
+      listMarkup = (
+        <Text style={styles.noUsers}>No users found</Text>
+      );
+    }
+
+    return (
+      <View style={styles.container}>
+        {currentUserView}
+        <Text style={styles.avaliableUsers}>Avaliable Users:</Text>
+        {listMarkup}
         {welcomeView}
       </View>
     );
@@ -100,12 +135,12 @@ class LoginScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { fetchingUsers, userList, userToken } = state.auth;
+  const { fetchingUsers, userList, userData } = state.auth;
   const { websocketConnected } = state.app;
   return {
     fetchingUsers,
     userList,
-    userToken,
+    userData,
     websocketConnected
   }
 }
