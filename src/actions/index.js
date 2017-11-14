@@ -1,7 +1,5 @@
-export function writeToSocket(data) {
-  return {
-    type: "WRITE_DATA",
-    payload: data,
-    meta: { websocket: true }
-  };
-}
+import setupWebsocket, { sendMessage } from './websocket';
+
+export const SETUP_WEBSOCKET = setupWebsocket;
+export const SEND_WEBSOCKET = sendMessage;
+

@@ -1,19 +1,11 @@
-const initialAuthState = { isLoggedIn: false, fetchingUsers: true };
+const initialAuthState = { fetchingUsers: true };
 
 export default function auth(state = initialAuthState, action) {
-	console.log("SOMETHING HERE")
   switch (action.type) {
-  	case 'list-current-users':
-  	  console.log("uuu");
-  	  console.log(state);
-  	  console.log('----');
-  	  console.log(action);
-  	  console.log("uuu");
-  	  return { ...state };
-    case 'Login':
-      return { ...state, isLoggedIn: true };
-    case 'Logout':
-      return { ...state, isLoggedIn: false };
+  	case 'MSG.user-list':
+  	  return { ...state, userList: action.users, fetchingUsers: false };
+    case 'MSG.token':
+      return { ...state, userToken: action.token };
     default:
       return state;
   }

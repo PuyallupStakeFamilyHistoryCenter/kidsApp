@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Button } from 'react-native-elements'
+import { Button } from 'react-native-elements';
 import User from './User';
 import Modal from '../Shared/Modal';
 import { screenStyles as styles } from './Styles';
 import { BACKGROUND_COLOR_CONFIRM, BACKGROUND_COLOR_CANCEL } from '../Styles';
 
-import { writeToSocket } from '../../actions';
+import { SEND_WEBSOCKET } from '../../actions';
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -20,12 +20,16 @@ class LoginScreen extends React.Component {
     this.state = {};
   }
 
-  // componentDidMount() {
-  //   console.log("$$$$");
-  //   console.log(this.props.dispatch);
-  //   console.log(writeToSocket)
-  //   this.props.dispatch(writeToSocket());
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fetchingUsers) {
+      SEND_WEBSOCKET('list-current-users');
+    }
+    if (!this.props.userToken && nextProps.userToken) {
+      console.log("LOGGED IN");
+      console.log(this.props.navigation);
+      this.props.navigation.dispatch({ type: 'Home' })
+    }
+  }
 
   handleUserSelect(id) {
     this.setState({
@@ -39,19 +43,28 @@ class LoginScreen extends React.Component {
     });
   }
 
+  handleLogin(id) {
+    SEND_WEBSOCKET('login ' + id + ' ' + this.state.userPin);
+  }
+
+  handleLogout() {
+    SEND_WEBSOCKET('logout ' + this.props.userToken);
+  }
+
   render() {
     let welcomeView;
     if (this.state.selectedUser) {
+      let selectedUserObj = this.props.userList.find(user => user.id === this.state.selectedUser);
       welcomeView = (
-        <Modal title={'Welcome ' + this.state.selectedUser} onClose={this.closeWelcomeScreen.bind(this)} animate={true}>
+        <Modal title={'Welcome ' + selectedUserObj.name} onClose={this.closeWelcomeScreen.bind(this)} animate={true}>
           <View style={styles.modalView}>
           <View style={styles.inputWrapper}>
             <Text style={styles.modalBody}>Please enter your pin:</Text>
-            <TextInput style={styles.modalInput}/>
+            <TextInput style={styles.modalInput} onChangeText={userPin => this.setState({userPin})}/>
           </View>
           <View style={styles.buttonWrapper}>
-            <Button title='Login' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CONFIRM}/>
-            <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CANCEL}/>
+            <Button title='Login' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CONFIRM} onPress={this.handleLogin.bind(this, selectedUserObj.id)}/>
+            <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CANCEL} onPress={this.handleLogout.bind(this)}/>
           </View>
           </View>
         </Modal>
@@ -66,10 +79,17 @@ class LoginScreen extends React.Component {
       );
     }
 
+    let userList = this.props.userList.map((user, idx) => {
+      return {
+        key: 'usr-' + idx,
+        ...user
+      };
+    });
+
     return (
       <View style={styles.container}>
         <FlatList
-          data={[{name: 'User a', key: 'user-1', id: 1}, {name: 'User b', key: 'user-2', id: 2}, {name: 'User c', key: 'user-3', id: 3}, {name: 'User d', key: 'user-4', id: 4}, {name: 'User e', key: 'user-5', id: 5}, {name: 'User f', key: 'user-6', id: 6}, {name: 'User g', key: 'user-7', id: 7}, {name: 'User h', key: 'user-8', id: 8}, {name: 'User i', key: 'user-9', id: 9}, {name: 'User j', key: 'user-10', id: 10}]}
+          data={userList}
           renderItem={({item}) => <User name={item.name} id={item.id} onTap={this.handleUserSelect.bind(this)}/>}
           style={styles.list}
         />
@@ -80,10 +100,13 @@ class LoginScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { fetchingUsers, isLoggedIn } = state.auth;
+  const { fetchingUsers, userList, userToken } = state.auth;
+  const { websocketConnected } = state.app;
   return {
     fetchingUsers,
-    isLoggedIn
+    userList,
+    userToken,
+    websocketConnected
   }
 }
 
