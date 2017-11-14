@@ -2,28 +2,45 @@ import React from 'react';
 import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { init as websocketInit, emit } from './src/actions/websocket';
 
 import AppReducer from './src/reducers';
 import AppWithNavigationState from './src/navigators/AppNavigator';
 
-const middleware = [ thunk.withExtraArgument({ emit }) ]
+// Create WebSocket connection.
+const socket = new WebSocket('ws://localhost:8080/');
+
+// Connection opened
+socket.addEventListener('open', function (event) {
+    console.log('Hello Server!');
+    socket.send('list-current-users');
+});
+
+// Connection opened
+socket.addEventListener('error', function (event) {
+  console.log('Hello Error');
+  console.log(event);
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+    console.log('Message from server ');
+    try {
+      console.log(JSON.parse(event.data));
+    } catch(e) {
+      console.log("CAN'T PARSE");
+    }
+    
+});
+
+const store = createStore(
+  AppReducer,
+  applyMiddleware()
+);
 
 class App extends React.Component {
-
-  constructor(props) {
-  	super(props);
-  	this.store = createStore(
-	  AppReducer,
-	  applyMiddleware(...middleware)
-	);
-	websocketInit(this.store);
-  }
-
   render() {
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <AppWithNavigationState />
       </Provider>
     );

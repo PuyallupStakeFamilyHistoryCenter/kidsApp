@@ -8,6 +8,8 @@ import Modal from '../Shared/Modal';
 import { screenStyles as styles } from './Styles';
 import { BACKGROUND_COLOR_CONFIRM, BACKGROUND_COLOR_CANCEL } from '../Styles';
 
+import { writeToSocket } from '../../actions';
+
 class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'Select User'
@@ -18,10 +20,12 @@ class LoginScreen extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    console.log("$$$$");
-    console.log(this.props);
-  }
+  // componentDidMount() {
+  //   console.log("$$$$");
+  //   console.log(this.props.dispatch);
+  //   console.log(writeToSocket)
+  //   this.props.dispatch(writeToSocket());
+  // }
 
   handleUserSelect(id) {
     this.setState({
