@@ -1,23 +1,27 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Button, ButtonGroup } from 'react-native-elements';
 import Modal from '../Shared/Modal';
 import Card from './Card';
 import { screenStyles as styles } from './Styles';
 import { BACKGROUND_COLOR_CONFIRM, BORDER_RADIUS, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
+import { SEND_WEBSOCKET } from '../../actions';
 
 class CardModel {
-  constructor(id, height, width) {
+  constructor(id, height, width, isImage, data) {
     this.id = id;
     this.height = height;
     this.width = width;
+    this.isImage = isImage;
+    this.data = data;
     this.flipped = false;
     this.solved = false;
   }
 }
 
-export default class MemoryScreen extends React.Component {
+class MemoryScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     let headerRight = (
       <Button
@@ -49,6 +53,7 @@ export default class MemoryScreen extends React.Component {
     this.props.navigation.setParams({
       onPress: this.handleSettingsOpen.bind(this)
     });
+    SEND_WEBSOCKET('get-ancestors ' + this.props.userData.token + ' ' + this.props.userData.id);
   }
 
   componentDidMount() {
@@ -91,6 +96,27 @@ export default class MemoryScreen extends React.Component {
     });
   }
 
+  shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
   setupGame() {
     let cardCount;
     let cardHeight;
@@ -111,10 +137,17 @@ export default class MemoryScreen extends React.Component {
       cardHeight = '33%';
       cardWidth = '25%';
     }
+    let validPeople = this.props.people.filter(person => {
+      return person.living === false && person.images && person.images.length;
+    });
+    validPeople = this.shuffle(validPeople);
+    let trimmedPeople = validPeople.slice(0, cardCount/2);
     let cards = [];
-    for (let i = 0; i < cardCount; i++) {
-      cards.push(new CardModel(i%2===0 ? i : i-1, cardHeight, cardWidth));
-    }
+    trimmedPeople.forEach(person => {
+      cards.push(new CardModel(person.id, cardHeight, cardWidth, false, person.name));
+      cards.push(new CardModel(person.id, cardHeight, cardWidth, true, 'https://localhost:8443' + person.images[0]));
+    });
+    cards = this.shuffle(cards);
     this.setState({
       cards
     });
@@ -194,6 +227,14 @@ export default class MemoryScreen extends React.Component {
   }
 
   render() {
+    if (this.props.fetchingPeople) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large"/>
+        </View>
+      );
+    }
+
     let settingsView;
     let winnerView;
     if (this.state.showSettings) {
@@ -237,3 +278,15 @@ export default class MemoryScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const { userData } = state.auth;
+  const { fetchingPeople, people } = state.people;
+  return {
+    fetchingPeople,
+    people,
+    userData
+  }
+}
+
+export default connect(mapStateToProps)(MemoryScreen)

@@ -33,6 +33,13 @@ class LoginScreen extends React.Component {
         ]
       });
       this.props.navigation.dispatch(resetAction);
+      this.props.dispatch({
+        type: 'UPDATE_USER_DATA',
+        data: {
+          id: this.state.selectedUser,
+          pin: this.state.userPin
+        }
+      });
     } else if (this.props.userData && !nextProps.userData) {
       const resetAction = NavigationActions.reset({
         index: 0,
@@ -61,8 +68,9 @@ class LoginScreen extends React.Component {
   }
 
   handleLogout() {
-    console.log("LOGOUT TIME");
-    SEND_WEBSOCKET('logout ' + this.props.userData.token);
+    if (this.props.userData) {
+      SEND_WEBSOCKET('logout ' + this.props.userData.token);
+    }
   }
 
   render() {
@@ -76,25 +84,43 @@ class LoginScreen extends React.Component {
 
     let welcomeView;
     if (this.state.selectedUser) {
-      let selectedUserObj = this.props.userList.find(user => user.id === this.state.selectedUser);
+      let selectedUserObj = this.props.userList.find(user => user.id === this.state.selectedUser) || {};
+      let logoutMarkup;
+      if (this.props.userData && this.props.userData.name === selectedUserObj.name) {
+        logoutMarkup = <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CANCEL} onPress={this.handleLogout.bind(this)}/>;
+      }
+      let errorMarkup;
+      if (this.props.signInError) {
+        errorMarkup = (
+          <View style={styles.pinErrorWrapper}>
+            <Text style={styles.pinError}>Incorrect PIN</Text>
+          </View>
+        )
+        setTimeout(() => {
+          this.props.dispatch({
+            type: 'CLEAR_SIGN_IN_ERR'
+          });
+          this.refs.pinInput.clear();
+        }, 3000);
+      }
       welcomeView = (
         <Modal title={'Welcome ' + selectedUserObj.name} onClose={this.closeWelcomeScreen.bind(this)} animate={true}>
           <View style={styles.modalView}>
           <View style={styles.inputWrapper}>
-            <Text style={styles.modalBody}>Please enter your pin:</Text>
-            <TextInput style={styles.modalInput} onChangeText={userPin => this.setState({userPin})}/>
+            <Text style={styles.modalBody}>Please enter your PIN:</Text>
+            <TextInput style={styles.modalInput} onChangeText={userPin => this.setState({userPin})} underlineColorAndroid="transparent" ref="pinInput"/>
           </View>
+          {errorMarkup}
           <View style={styles.buttonWrapper}>
             <Button title='Login' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CONFIRM} onPress={this.handleLogin.bind(this, selectedUserObj.id)}/>
-            <Button title='Logout' buttonStyle={styles.loginButton} backgroundColor={BACKGROUND_COLOR_CANCEL} onPress={this.handleLogout.bind(this)}/>
+            {logoutMarkup}
           </View>
           </View>
         </Modal>
       );
     }
 
-    let loggedInString = this.props.userData ? ('Currently logged in as ' + this.props.userData.name) : 'Currently no user logged in';
-    console.log(this.props.userData);
+    let loggedInString = this.props.userData ? ('Currently logged in as ' + this.props.userData.name) : 'Currently no user is logged in';
     let currentUserView = (
       <View style={styles.userHeader}>
         <Text style={styles.userTitle}>{loggedInString}</Text>
@@ -135,12 +161,13 @@ class LoginScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { fetchingUsers, userList, userData } = state.auth;
+  const { fetchingUsers, userList, userData, signInError } = state.auth;
   const { websocketConnected } = state.app;
   return {
     fetchingUsers,
     userList,
     userData,
+    signInError,
     websocketConnected
   }
 }

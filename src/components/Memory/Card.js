@@ -56,11 +56,22 @@ export default class Card extends React.Component {
       transform: [
         { rotateY: this.frontInterpolate }
       ]
-    }
+    };
     const backAnimatedStyle = {
       transform: [
         { rotateY: this.backInterpolate }
       ]
+    };
+    let backCardMarkup;
+    if (this.props.isImage) {
+      backCardMarkup = (
+        <Image
+          style={styles.backgroundImage}
+          source={{uri: this.props.data}}
+        />
+      );
+    } else {
+      backCardMarkup = <Text>{this.props.data}</Text>;
     }
     return (
       <View style={[styles.container, {height: this.props.height, width: this.props.width}]}>
@@ -72,7 +83,7 @@ export default class Card extends React.Component {
             />
           </Animated.View>
           <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack, (this.props.flipped ? {zIndex: 2} : {zIndex: 1})]}>
-            <Text>{this.props.id}</Text>
+            {backCardMarkup}
           </Animated.View>
         </TouchableOpacity>
       </View>

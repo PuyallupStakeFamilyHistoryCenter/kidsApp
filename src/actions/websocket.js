@@ -18,8 +18,6 @@ export default setupWebsocket = () => {
 
 		// Listen for messages
 		socket.addEventListener('message', event => {
-			console.log("GOT A MESSAGE");
-			console.log(event.data);
 		    let data = event.data;
 		    try {
 		      data = JSON.parse(data);

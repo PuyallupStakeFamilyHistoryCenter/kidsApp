@@ -3,6 +3,7 @@ import {
   BORDER_COLOR_DARK,
   BORDER_RADIUS,
   BORDER_WIDTH,
+  FONT_COLOR_ERROR,
   FONT_SIZE_M,
   FONT_SIZE_XL,
   HEADER_1,
@@ -59,6 +60,10 @@ export const screenStyles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: MARGIN_XXL,
     width: '100%'
+  },
+  pinError: {
+    color: FONT_COLOR_ERROR,
+    fontSize: FONT_SIZE_M
   },
   loginButton: {
     flex: 1,

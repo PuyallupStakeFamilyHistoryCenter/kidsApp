@@ -18,6 +18,7 @@ export const BORDER_RADIUS = 4;
 export const BORDER_WIDTH = 2;
 
 export const FONT_COLOR_DARK = '#000';
+export const FONT_COLOR_ERROR = '#ff0000';
 export const FONT_COLOR_LIGHT = '#fff';
 
 export const FONT_SIZE_S = 12;
