@@ -6,16 +6,17 @@ import { Button, ButtonGroup } from 'react-native-elements';
 import Modal from '../Shared/Modal';
 import Card from './Card';
 import { screenStyles as styles } from './Styles';
-import { BACKGROUND_COLOR_CONFIRM, BORDER_RADIUS, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
+import { BACKGROUND_COLOR_CONFIRM, BORDER_RADIUS, FONT_COLOR_DARK, FONT_COLOR_LIGHT, FONT_SIZE_S, FONT_SIZE_M, FONT_SIZE_L } from '../Styles';
 import { SEND_WEBSOCKET } from '../../actions';
 
 class CardModel {
-  constructor(id, height, width, isImage, data) {
+  constructor(id, height, width, type, data, subTitle) {
     this.id = id;
     this.height = height;
     this.width = width;
-    this.isImage = isImage;
+    this.type = type;
     this.data = data;
+    this.subTitle = subTitle;
     this.flipped = false;
     this.solved = false;
   }
@@ -42,7 +43,10 @@ class MemoryScreen extends React.Component {
     super(props);
     this.state = {
       cards: [],
+      cardType1: 0,
+      cardType2: 1,
       firstRender: true,
+      selectedDifficulty: 0,
       showSettings: true,
       matches: 0,
       winner: false
@@ -84,6 +88,25 @@ class MemoryScreen extends React.Component {
     this.setState({
       selectedDifficulty: selectedIdx
     });
+  }
+
+  updateCardType(cardNum, selectedIdx) {
+    if (cardNum === 1) {
+      if (this.state.cardType1 !== selectedIdx) {
+        this.resetGame();
+      }
+      newState = {
+        cardType1: selectedIdx
+      };
+    } else {
+      if (this.state.cardType2 !== selectedIdx) {
+        this.resetGame();
+      }
+      newState = {
+        cardType2: selectedIdx
+      };
+    }
+    this.setState(newState);
   }
 
   resetGame() {
@@ -137,15 +160,89 @@ class MemoryScreen extends React.Component {
       cardHeight = '33%';
       cardWidth = '25%';
     }
+    let validateData = (type, data) => {
+      let isValid = true;
+      switch(type) {
+      case 0: //Name
+        isValid = !!data.name;
+        break;
+      case 1: //Image
+        isValid = !!(data.images && data.images.length);
+        break;
+      case 2: //Birthdate
+        isValid = !!(data.facts && data.facts.length);
+        if (isValid) {
+          isValid = !!data.facts.find(fact => {
+            return fact.type === 'Birth';
+          });
+        }
+        break;
+      case 3: //Deathdate
+        isValid = !!(data.facts && data.facts.length);
+        if (isValid) {
+          isValid = !!data.facts.find(fact => {
+            return fact.type === 'Death';
+          });
+        }
+        break;
+      default:
+        isValid = false;
+      }
+      return isValid;
+    }
     let validPeople = this.props.people.filter(person => {
-      return person.living === false && person.images && person.images.length;
+      let validType1 = validateData(this.state.cardType1, person);
+      let validType2 = validateData(this.state.cardType2, person);
+      return person.living === false && validType1 && validType2;
     });
     validPeople = this.shuffle(validPeople);
     let trimmedPeople = validPeople.slice(0, cardCount/2);
     let cards = [];
     trimmedPeople.forEach(person => {
-      cards.push(new CardModel(person.id, cardHeight, cardWidth, false, person.name));
-      cards.push(new CardModel(person.id, cardHeight, cardWidth, true, 'https://localhost:8443' + person.images[0]));
+      let getData = (type, data) => {
+        let result;
+        let typeStr;
+        switch(type) {
+        case 0: //Name
+          result = data.name;
+          typeStr = 'name';
+          break;
+        case 1: //Image
+          result = 'https://localhost:8443' + data.images[0];
+          typeStr = 'image';
+          break;
+        case 2: //Birthdate
+          let birthFact = data.facts.find(fact => {
+            return fact.type === 'Birth';
+          });
+          result = birthFact.date;
+          typeStr = 'birth';
+          break;
+        case 3: //Deathdate
+          let deathFact = data.facts.find(fact => {
+            return fact.type === 'Death';
+          });
+          result = deathFact.date;
+          typeStr = 'death';
+          break;
+        }
+        return {
+          type: typeStr,
+          result
+        };
+      }
+      let cardData1 = getData(this.state.cardType1, person);
+      let cardData2 = getData(this.state.cardType2, person);
+      let subTitle1;
+      let subTitle2;
+      if (cardData1.type !== 'name' && cardData2.type !== 'name') {
+        subTitle1 = person.name;
+        if (cardData1.type === cardData2.type) {
+          subTitle2 = subTitle1;
+        }
+      }
+      cards.push(new CardModel(person.id, cardHeight, cardWidth, cardData1.type, cardData1.result, subTitle1));
+      cards.push(new CardModel(person.id, cardHeight, cardWidth, cardData2.type, cardData2.result, subTitle2));
     });
     cards = this.shuffle(cards);
     this.setState({
@@ -245,9 +342,29 @@ class MemoryScreen extends React.Component {
           <Text style={styles.subTitle}>Difficulty</Text>
           <ButtonGroup
             onPress={this.updateDifficulty.bind(this)}
-            selectedIndex={this.state.selectedDifficulty || 0}
+            selectedIndex={this.state.selectedDifficulty}
             buttons={['Easy', 'Medium', 'Hard']}
-            containerStyle={{height: 75}}
+            containerStyle={{height: 50}}
+            containerBorderRadius={BORDER_RADIUS}
+            selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
+            selectedTextStyle={{color: FONT_COLOR_LIGHT}}
+          />
+          <Text style={styles.subTitle}>First Card Type</Text>
+          <ButtonGroup
+            onPress={this.updateCardType.bind(this, 1)}
+            selectedIndex={this.state.cardType1}
+            buttons={['Name', 'Image', 'Birthdate', 'Deathdate']}
+            containerStyle={{height: 50}}
+            containerBorderRadius={BORDER_RADIUS}
+            selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
+            selectedTextStyle={{color: FONT_COLOR_LIGHT}}
+          />
+          <Text style={styles.subTitle}>Second Card Type</Text>
+          <ButtonGroup
+            onPress={this.updateCardType.bind(this, 2)}
+            selectedIndex={this.state.cardType2}
+            buttons={['Name', 'Image', 'Birthdate', 'Deathdate']}
+            containerStyle={{height: 50}}
             containerBorderRadius={BORDER_RADIUS}
             selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
             selectedTextStyle={{color: FONT_COLOR_LIGHT}}
@@ -263,8 +380,9 @@ class MemoryScreen extends React.Component {
     }
 
     let cards = [];
+    let fontSize = this.state.selectedDifficulty === 0 ? FONT_SIZE_L : this.state.selectedDifficulty === 1 ? FONT_SIZE_M : FONT_SIZE_S;
     this.state.cards.forEach((card, i) => {
-      cards.push(<Card key={'memory-'+i} onTap={this.handleCardTap.bind(this, i)} {...card}/>)
+      cards.push(<Card key={'memory-'+i} onTap={this.handleCardTap.bind(this, i)} fontSize={fontSize} {...card}/>)
     });
 
     return (

@@ -6,6 +6,7 @@ import {
   BORDER_RADIUS,
   BORDER_WIDTH,
   FONT_COLOR_LIGHT,
+  FONT_SIZE_S,
   FONT_SIZE_M,
   HEADER_2,
   MARGIN_S,
@@ -69,5 +70,15 @@ export const cardStyles = StyleSheet.create({
     position: 'absolute',
     top: 0
   },
-  backgroundImage: BACKGROUND_IMAGE
+  backgroundImage: BACKGROUND_IMAGE,
+  subTitle: {
+    fontSize: FONT_SIZE_S,
+    fontWeight: 'bold',
+    backgroundColor: BACKGROUND_TRANSPARENT_DARK,
+    color: FONT_COLOR_LIGHT,
+    textAlign: 'center',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%'
+  }
 });

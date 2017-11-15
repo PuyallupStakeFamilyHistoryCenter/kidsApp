@@ -10,6 +10,20 @@ import {
 } from 'react-native';
 import { cardStyles as styles } from './Styles';
 
+function getParameterByName(url, name) {
+  const parsedName = name.replace(/[[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${parsedName}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return '';
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 export default class Card extends React.Component {
   componentWillMount() {
     this.animatedValue = new Animated.Value(0);
@@ -63,15 +77,27 @@ export default class Card extends React.Component {
       ]
     };
     let backCardMarkup;
-    if (this.props.isImage) {
+    if (this.props.type === 'image') {
+      // TODO: Figure out how to use image cache URL
+      let url = getParameterByName(this.props.data, 'ref').split("?")[0];
       backCardMarkup = (
         <Image
           style={styles.backgroundImage}
-          source={{uri: this.props.data}}
+          source={{uri: url}}
         />
       );
     } else {
-      backCardMarkup = <Text>{this.props.data}</Text>;
+      let strText = this.props.data;
+      if (this.props.type === 'birth') {
+        strText = 'Birth: ' + strText;
+      } else if (this.props.type === 'death') {
+        strText = 'Death: ' + strText;
+      }
+      backCardMarkup = <Text style={{fontSize: this.props.fontSize}}>{strText}</Text>;
+    }
+    let subTitleMarkup;
+    if (this.props.subTitle) {
+      subTitleMarkup = <Text style={[styles.subTitle, {fontSize: this.props.fontSize}]}>{this.props.subTitle}</Text>;
     }
     return (
       <View style={[styles.container, {height: this.props.height, width: this.props.width}]}>
@@ -84,6 +110,7 @@ export default class Card extends React.Component {
           </Animated.View>
           <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack, (this.props.flipped ? {zIndex: 2} : {zIndex: 1})]}>
             {backCardMarkup}
+            {subTitleMarkup}
           </Animated.View>
         </TouchableOpacity>
       </View>
