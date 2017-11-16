@@ -44,5 +44,14 @@ export const modalStyles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     marginRight: -MARGIN_XL
+  },
+  footerBtnWrapper: {
+    alignItems: 'center',
+    display: 'flex',
+    marginBottom: MARGIN_M
+  },
+  footerBtn: {
+    borderRadius: BORDER_RADIUS,
+    width: 200
   }
 });

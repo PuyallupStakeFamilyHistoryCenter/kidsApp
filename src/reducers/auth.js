@@ -18,6 +18,8 @@ export default function auth(state = initialAuthState, action) {
       return { ...state, signInError: false };
     case 'UPDATE_USER_DATA':
       return { ...state, userData: { ...state.userData, ...action.data }};
+    case 'START_FETCH_USERS':
+      return { ...state, fetchingUsers: true, userList: undefined };
     default:
       return state;
   }

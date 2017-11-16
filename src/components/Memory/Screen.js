@@ -336,7 +336,7 @@ class MemoryScreen extends React.Component {
     let winnerView;
     if (this.state.showSettings) {
       settingsView = (
-        <Modal title="Settings" onClose={this.handleSettingsClose.bind(this)} animate={!this.state.firstRender}>
+        <Modal title="Settings" onClose={this.handleSettingsClose.bind(this)} animate={!this.state.firstRender} footerBtn="Start">
           <Text style={styles.subTitle}>Instructions</Text>
           <Text style={styles.bodyText}>Turn over any two cards to try and find a match. Remember what was on each card and where it was. The game is over when all the cards have been matched.</Text>
           <Text style={styles.subTitle}>Difficulty</Text>

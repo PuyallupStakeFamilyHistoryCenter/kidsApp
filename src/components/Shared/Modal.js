@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { modalStyles as styles } from './Styles';
-import { FONT_COLOR_DARK } from '../Styles';
+import { BACKGROUND_COLOR_CONFIRM, FONT_COLOR_DARK, FONT_COLOR_LIGHT } from '../Styles';
 
 export default class Modal extends React.Component {
   constructor(props) {
@@ -24,6 +24,20 @@ export default class Modal extends React.Component {
   }
 
   render() {
+    let footerBtn;
+    if (this.props.footerBtn) {
+      footerBtn = (
+        <View style={styles.footerBtnWrapper}>
+          <Button
+            backgroundColor={BACKGROUND_COLOR_CONFIRM}
+            buttonStyle={styles.footerBtn}
+            onPress={this.props.onClose}
+            color={FONT_COLOR_LIGHT}
+            title={this.props.footerBtn}
+          />
+        </View>
+      );
+    }
     return (
       <TouchableWithoutFeedback onPress={this.props.onClose}>
         <View style={styles.container}>
@@ -41,6 +55,7 @@ export default class Modal extends React.Component {
               <ScrollView style={styles.body}>
                 {this.props.children}
               </ScrollView>
+              {footerBtn}
             </Animated.View>
           </TouchableWithoutFeedback>
         </View>

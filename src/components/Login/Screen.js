@@ -51,6 +51,12 @@ class LoginScreen extends React.Component {
     }
   }
 
+  handleRefresh() {
+    this.props.dispatch({
+      type: 'START_FETCH_USERS'
+    });
+  }
+
   handleUserSelect(id) {
     this.setState({
       selectedUser: id
@@ -141,6 +147,8 @@ class LoginScreen extends React.Component {
           data={userList}
           renderItem={({item}) => <User name={item.name} id={item.id} onTap={this.handleUserSelect.bind(this)}/>}
           style={styles.list}
+          refreshing={this.props.fetchingUsers}
+          onRefresh={this.handleRefresh.bind(this)}
         />
       );
     } else {
