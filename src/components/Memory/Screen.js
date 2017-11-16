@@ -343,7 +343,7 @@ class MemoryScreen extends React.Component {
           <ButtonGroup
             onPress={this.updateDifficulty.bind(this)}
             selectedIndex={this.state.selectedDifficulty}
-            buttons={['Easy', 'Medium', 'Hard']}
+            buttons={['Easy (12 cards)', 'Medium (24 cards)', 'Hard (40 cards)']}
             containerStyle={{height: 50}}
             containerBorderRadius={BORDER_RADIUS}
             selectedBackgroundColor={BACKGROUND_COLOR_CONFIRM}
